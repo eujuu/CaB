@@ -776,9 +776,11 @@ def return_coordinates(
   box_to_instance_masks_map = {}
   box_to_instance_boundaries_map = {}
   box_to_score_map = {}
+  box_to_class_map ={}
   box_to_keypoints_map = collections.defaultdict(list)
   if not max_boxes_to_draw:
     max_boxes_to_draw = boxes.shape[0]
+
   for i in range(min(max_boxes_to_draw, boxes.shape[0])):
     if scores is None or scores[i] > min_score_thresh:
       box = tuple(boxes[i].tolist())
@@ -799,6 +801,7 @@ def return_coordinates(
             else:
               class_name = 'N/A'
             display_str = str(class_name)
+        box_to_class_map[box] = class_name
         if not skip_scores:
           if not display_str:
             display_str = '{}%'.format(int(100*scores[i]))
@@ -822,8 +825,8 @@ def return_coordinates(
     ymax = int(ymax*height)
     xmin = int(xmin*width)
     xmax = int(xmax*width)
-    #coordinates_list.append([ymin, ymax, xmin, xmax, (box_to_score_map[box]*100)])
-    coordinates_list=[class_name, ymin, ymax, xmin, xmax, (box_to_score_map[box]*100)]
+    coordinates_list.append([box_to_class_map[box], ymin, ymax, xmin, xmax, (box_to_score_map[box]*100)])
+    # coordinates_list=[counter_for, i, class_name, ymin, ymax, xmin, xmax, (box_to_score_map[box]*100)]
     counter_for = counter_for + 1
 
   return coordinates_list
