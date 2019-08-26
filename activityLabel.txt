@@ -1,0 +1,4 @@
+1,stand up,
+2,sit down,
+3,walking,
+END
